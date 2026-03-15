@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Serif+JP:wght@600;700&family=Outfit:wght@400;600&display=swap');
+
+:root {
+  /* Antique / Scroll Palette */
+  --parchment: #f4e9d5;
+  /* 羊皮紙の色 */
+  --parchment-dark: #e8d8b8;
+  --antique-ink: #3c2f2f;
+  /* 古いインク色 */
+  --antique-gold: #c5a059;
+  /* 真鍮・金 */
+  --antique-red: #8e2121;
+  /* 封蝋のような赤 */
+  --antique-green: #3e5a3e;
+  /* 深い緑 */
+
+  --sakura-pink: #ffdae9;
+  /* 以前の名残（互換性用） */
+  --sakura-pink-deep: #d85d8d;
+
+  --text-main: var(--antique-ink);
+  --text-muted: #6b5b5b;
+  --bg-main: #dfd3c3;
+  /* 机のような色 */
+  --bg-card: var(--parchment);
+  --shadow-soft: 2px 4px 15px rgba(0, 0, 0, 0.15);
+  --border-radius: 8px;
+  /* 本や巻物っぽく少し角は抑えめに */
+
+  --font-serif: 'Noto Serif JP', serif;
+  --font-sans: 'Noto Sans JP', 'Outfit', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-main);
+  background-image: radial-gradient(#c5b39b 1px, transparent 1px);
+  background-size: 20px 20px;
+  color: var(--text-main);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  letter-spacing: 0.05em;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-soft);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--parchment-dark);
+  position: relative;
+  overflow: hidden;
+}
+
+/* 巻物・本のような装飾エフェクト */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+  background: var(--parchment-dark);
+  opacity: 0.5;
+}
+
+.fade-up {
+  animation: fadeUp 0.6s ease-out forwards;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 共通ユーティリティ */
+.antique-btn {
+  background: var(--antique-ink);
+  color: var(--parchment);
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.antique-btn:hover {
+  background: var(--antique-red);
+  transform: translateY(-1px);
+}
