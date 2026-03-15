@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { AppData, TripItem } from '../types';
-import { MapPin, Notebook, Plus, CheckCircle2, Circle, Trash2, Plane, Train, Bus, Car, Footprints, ExternalLink, Link, Lock, Unlock, Bike, Ship, Bot, TramFront, GripVertical } from 'lucide-react';
+import { MapPin, Notebook, Plus, CheckCircle2, Circle, Trash2, Plane, Train, Bus, Car, Footprints, ExternalLink, Link, Lock, Unlock, Bike, Ship, Bot, TramFront, GripVertical, Hotel, Utensils } from 'lucide-react';
 
 interface Props {
   data: AppData;
@@ -169,6 +169,8 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
       case 'ship': return <Ship size={14} />;
       case 'robot': return <Bot size={14} />;
       case 'tram': return <TramFront size={14} />;
+      case 'hotel': return <Hotel size={14} />;
+      case 'meal': return <Utensils size={14} />;
       default: return null;
     }
   };
@@ -283,6 +285,8 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
                       <option value="ship">船</option>
                       <option value="robot">ロボット</option>
                       <option value="tram">路面電車</option>
+                      <option value="hotel">宿泊</option>
+                      <option value="meal">食事</option>
                     </select>
                   </div>
 
@@ -646,6 +650,7 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
         .timeline-content {
           flex: 1;
           padding-bottom: 2rem;
+          min-width: 0;
         }
         .item-main {
           display: flex;
@@ -712,6 +717,8 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
           align-items: center;
           gap: 0.5rem;
           color: var(--text-muted);
+          width: 100%;
+          min-width: 0;
         }
         .memo-input {
           font-size: 0.75rem;
@@ -719,6 +726,9 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
           background: transparent;
           width: 100%;
           color: var(--antique-green);
+          min-width: 0;
+          flex: 1;
+          text-overflow: ellipsis;
         }
         .memo-textarea {
           font-size: 0.85rem;
