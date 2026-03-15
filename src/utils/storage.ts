@@ -1,46 +1,36 @@
+import { Preferences } from '@capacitor/preferences';
+
 export const storage = {
-    get: <T>(key: string): T | null => {
+    get: async <T>(key: string): Promise<T | null> => {
         try {
-            // simulate window.storage or use localStorage
-            const item = typeof window !== 'undefined' && (window as any).storage
-                ? (window as any).storage.get(key)
-                : localStorage.getItem(key);
-            return item ? JSON.parse(item) : null;
+            const { value } = await Preferences.get({ key });
+            return value ? JSON.parse(value) : null;
         } catch (e) {
             console.error('Storage get error', e);
             return null;
         }
     },
-    set: <T>(key: string, value: T): void => {
+    set: async <T>(key: string, value: T): Promise<void> => {
         try {
-            const stringValue = JSON.stringify(value);
-            if (typeof window !== 'undefined' && (window as any).storage) {
-                (window as any).storage.set(key, stringValue);
-            } else {
-                localStorage.setItem(key, stringValue);
-            }
+            await Preferences.set({
+                key,
+                value: JSON.stringify(value),
+            });
         } catch (e) {
             console.error('Storage set error', e);
         }
     },
-    delete: (key: string): void => {
+    delete: async (key: string): Promise<void> => {
         try {
-            if (typeof window !== 'undefined' && (window as any).storage) {
-                (window as any).storage.delete(key);
-            } else {
-                localStorage.removeItem(key);
-            }
+            await Preferences.remove({ key });
         } catch (e) {
             console.error('Storage delete error', e);
         }
     },
-    list: (): string[] => {
+    list: async (): Promise<string[]> => {
         try {
-            if (typeof window !== 'undefined' && (window as any).storage) {
-                return (window as any).storage.list();
-            } else {
-                return Object.keys(localStorage);
-            }
+            const { keys } = await Preferences.keys();
+            return keys;
         } catch (e) {
             console.error('Storage list error', e);
             return [];

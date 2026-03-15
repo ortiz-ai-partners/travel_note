@@ -38,25 +38,32 @@ import { generatePDF } from './utils/pdfExport';
 
 
 const App: React.FC = () => {
-  const [state, setState] = useState<GlobalState>(() => {
-    const saved = storage.get<GlobalState>('trip_planner_global_v2');
-    if (saved) return saved;
+  const [state, setState] = useState<GlobalState>({ trips: [], isPremium: false });
+  const [isInitialized, setIsInitialized] = useState(false);
 
-    // 旧データからの移行
-    const oldData = storage.get<AppData>('trip_planner_data');
-    if (oldData) {
-      const migratedTrip: Trip = {
-        id: '1',
-        title: oldData.tripTitle || '最初の冒険',
-        description: '移行された旅の記録',
-        createdAt: new Date().toISOString(),
-        data: oldData
-      };
-      return { trips: [migratedTrip], isPremium: false };
-    }
-
-    return { trips: [], isPremium: false };
-  });
+  useEffect(() => {
+    const loadData = async () => {
+      const saved = await storage.get<GlobalState>('trip_planner_global_v2');
+      if (saved) {
+        setState(saved);
+      } else {
+        // 旧データからの移行
+        const oldData = await storage.get<AppData>('trip_planner_data');
+        if (oldData) {
+          const migratedTrip: Trip = {
+            id: '1',
+            title: oldData.tripTitle || '最初の冒険',
+            description: '移行された旅の記録',
+            createdAt: new Date().toISOString(),
+            data: oldData
+          };
+          setState({ trips: [migratedTrip], isPremium: false });
+        }
+      }
+      setIsInitialized(true);
+    };
+    loadData();
+  }, []);
 
   const [activeTripId, setActiveTripId] = useState<string | null>(null);
   const activeTrip = state.trips.find(t => t.id === activeTripId);
@@ -93,8 +100,10 @@ const App: React.FC = () => {
   }, [targetDate, data]);
 
   useEffect(() => {
-    storage.set('trip_planner_global_v2', state);
-  }, [state]);
+    if (isInitialized) {
+      storage.set('trip_planner_global_v2', state);
+    }
+  }, [state, isInitialized]);
 
   const createNewTrip = () => {
     if (!state.isPremium && state.trips.length >= 1) {
@@ -150,10 +159,10 @@ const App: React.FC = () => {
     }));
   };
 
-  const resetData = () => {
+  const resetData = async () => {
     if (window.confirm('データを初期化しますか？')) {
       setData(initialData);
-      storage.delete('trip_planner_data');
+      await storage.delete('trip_planner_data');
     }
   };
 
@@ -389,6 +398,14 @@ const App: React.FC = () => {
       default: return <ScheduleTab data={data} setData={setData} />;
     }
   };
+
+  if (!isInitialized) {
+    return (
+      <div className="app-container" style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <p style={{ fontFamily: 'var(--font-serif)', color: 'var(--antique-gold)' }}>冒険の書を読み込み中...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="app-container">
