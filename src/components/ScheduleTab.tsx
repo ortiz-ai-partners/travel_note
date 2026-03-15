@@ -173,12 +173,7 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
     }
   };
 
-  const cycleTransport = (dayIdx: number, itemId: string, current?: string) => {
-    const types: (string | undefined)[] = [undefined, 'plane', 'train', 'bus', 'car', 'walk', 'bike', 'ship', 'robot', 'tram'];
-    const currentIndex = types.indexOf(current);
-    const nextIndex = (currentIndex + 1) % types.length;
-    updateItem(dayIdx, itemId, 'transport', types[nextIndex]);
-  };
+
 
   const totalItems = data.schedule.reduce((acc, day) => acc + day.items.length, 0);
   const completedItems = data.schedule.reduce((acc, day) => acc + day.items.filter(i => i.completed).length, 0);
@@ -278,13 +273,28 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
                           value={item.name}
                           onChange={(e) => updateItem(selectedDayIdx, item.id, 'name', e.target.value)}
                         />
-                        <button
-                          className="transport-toggle-btn"
-                          onClick={() => cycleTransport(selectedDayIdx, item.id, item.transport)}
-                          title="移動手段を切り替え"
-                        >
-                          {getTransportIcon(item.transport) || <Circle size={14} className="transport-empty" />}
-                        </button>
+                        <div className="transport-select-wrapper">
+                          <div className="transport-current-icon">
+                            {getTransportIcon(item.transport) || <Circle size={14} className="transport-empty" />}
+                          </div>
+                          <select
+                            className="transport-select"
+                            value={item.transport || ''}
+                            onChange={(e) => updateItem(selectedDayIdx, item.id, 'transport', e.target.value || undefined)}
+                            title="移動手段を選択"
+                          >
+                            <option value="">なし</option>
+                            <option value="plane">飛行機</option>
+                            <option value="train">電車</option>
+                            <option value="bus">バス</option>
+                            <option value="car">車</option>
+                            <option value="walk">徒歩</option>
+                            <option value="bike">自転車</option>
+                            <option value="ship">船</option>
+                            <option value="robot">ロボット</option>
+                            <option value="tram">路面電車</option>
+                          </select>
+                        </div>
                       </div>
                       <div className="item-location">
                         <MapPin size={12} />
@@ -634,7 +644,8 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
           font-size: 1.05rem;
           font-weight: 700;
           color: var(--antique-ink);
-          width: 100%;
+          flex: 1;
+          min-width: 0;
           background: transparent;
           border: none;
           padding: 2px 0;
@@ -666,10 +677,11 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
           border-left: 2px solid var(--antique-gold);
           padding: 1rem;
           border-radius: 4px;
-          margin-left: 2rem;
+          margin-left: 1rem;
           display: flex;
           flex-direction: column;
           gap: 0.8rem;
+          overflow: hidden;
         }
         .detail-row {
           display: flex;
@@ -865,25 +877,40 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
           display: flex;
           align-items: center;
           gap: 0.5rem;
+          width: 100%;
         }
-        .transport-toggle-btn {
+        .transport-select-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
           background: var(--parchment-dark);
           border: 1px solid rgba(0,0,0,0.1);
-          border-radius: 50%;
-          width: 24px;
-          height: 24px;
+          border-radius: 4px;
+          padding: 0 0.5rem;
+          height: 28px;
+          transition: all 0.2s;
+        }
+        .transport-select-wrapper:hover {
+          border-color: var(--antique-gold);
+          background: rgba(197, 160, 89, 0.1);
+        }
+        .transport-current-icon {
           display: flex;
           align-items: center;
           justify-content: center;
-          cursor: pointer;
           color: var(--antique-ink);
-          transition: all 0.2s;
-          flex-shrink: 0;
+          margin-right: 0.3rem;
+          pointer-events: none;
         }
-        .transport-toggle-btn:hover {
-          background: var(--antique-gold);
-          color: white;
-          border-color: var(--antique-gold);
+        .transport-select {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+          cursor: pointer;
+          -webkit-appearance: none;
         }
         .transport-empty {
           opacity: 0.3;
