@@ -19,7 +19,8 @@ import {
   ArrowLeft,
   Lock,
   ChevronRight,
-  Settings
+  Settings,
+  HelpCircle
 } from 'lucide-react';
 import { differenceInDays, differenceInHours, differenceInMinutes, parseISO } from 'date-fns';
 import type { Trip, GlobalState, CustomPackingTemplate } from './types';
@@ -32,6 +33,7 @@ import BudgetTab from './components/BudgetTab';
 import WeatherTab from './components/WeatherTab';
 import BucketListTab from './components/BucketListTab';
 import PhotoLogTab from './components/PhotoLogTab';
+import ManualTab from './components/ManualTab';
 import { generatePDF } from './utils/pdfExport';
 
 
@@ -317,6 +319,7 @@ const App: React.FC = () => {
       );
     }
     switch (activeTab) {
+      case 'manual': return <ManualTab />;
       case 'schedule': return <ScheduleTab data={data} setData={setData} addDay={addDay} removeDay={removeDay} />;
       case 'bucket': return <BucketListTab data={data} setData={setData} />;
       case 'coordinates': return <CoordinatesTab data={data} setData={setData} />;
@@ -441,6 +444,10 @@ const App: React.FC = () => {
 
         {activeTripId && (
           <nav className="tab-nav">
+            <button className={`tab-btn ${activeTab === 'manual' ? 'active' : ''}`} onClick={() => setActiveTab('manual')}>
+              <HelpCircle size={20} />
+              <span>使い方</span>
+            </button>
             <button className={`tab-btn ${activeTab === 'schedule' ? 'active' : ''}`} onClick={() => setActiveTab('schedule')}>
               <Calendar size={20} />
               <span>旅程</span>
