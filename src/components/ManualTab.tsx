@@ -2,41 +2,41 @@ import React from 'react';
 import { HelpCircle, BookOpen, Map, Luggage, Wallet, Camera } from 'lucide-react';
 
 const ManualTab: React.FC = () => {
-    return (
-        <div className="manual-tab">
-            <div className="manual-header card">
-                <h1><HelpCircle size={28} style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} /> 冒険の進め方</h1>
-                <p>この「冒険の書」を使いこなし、最高の旅を記録するためのガイドです。</p>
-            </div>
+  return (
+    <div className="manual-tab">
+      <div className="manual-header card">
+        <h1><HelpCircle size={28} style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} /> 冒険の進め方</h1>
+        <p>この「冒険の書」を使いこなし、最高の旅を記録するためのガイドです。</p>
+      </div>
 
-            <div className="manual-grid">
-                <section className="manual-section card">
-                    <h2><BookOpen size={20} /> 冒険の管理（ダッシュボード）</h2>
-                    <p>最初の画面では、複数の旅（冒険の書）を作成・管理できます。タイトルの鉛筆マークをタップして、好きな名前を付けましょう。</p>
-                </section>
+      <div className="manual-grid">
+        <section className="manual-section card">
+          <h2><BookOpen size={20} /> 冒険の管理（ダッシュボード）</h2>
+          <p>最初の画面では、複数の旅（冒険の書）を作成・管理できます。タイトルの鉛筆マークをタップして、好きな名前を付けましょう。</p>
+        </section>
 
-                <section className="manual-section card">
-                    <h2><Map size={20} /> 旅程と予算（軍資金）</h2>
-                    <p>「旅程」で日ごとのスケジュールを入力すると、そこで設定した「予定額」が「軍資金」タブに自動反映されます。実績を入力して、予算オーバーに気をつけましょう！</p>
-                </section>
+        <section className="manual-section card">
+          <h2><Map size={20} /> 旅程と予算（軍資金）</h2>
+          <p>「旅程」で日ごとのスケジュールを入力すると、そこで設定した「予定額」が「軍資金」タブに自動反映されます。実績を入力して、予算オーバーに気をつけましょう！</p>
+        </section>
 
-                <section className="manual-section card">
-                    <h2><Luggage size={20} /> 装備の準備（持ち物）</h2>
-                    <p>「荷物」タブでは、便利なテンプレートが使えます。タップしてプレビューし、一括で追加できます。自分だけのカスタムテンプレートを保存することも可能です（プレミアム機能）。</p>
-                </section>
+        <section className="manual-section card">
+          <h2><Luggage size={20} /> 装備の準備（持ち物）</h2>
+          <p>「荷物」タブでは、便利なテンプレートが使えます。タップしてプレビューし、一括で追加できます。自分だけのカスタムテンプレートを保存することも可能です（プレミアム機能）。</p>
+        </section>
 
-                <section className="manual-section card">
-                    <h2><Camera size={20} /> 思い出の記録（記憶）</h2>
-                    <p>旅先で撮った写真は「記憶」タブへ。スマホのカメラでその場ですぐに保存できます。画像をクリックすると大きく表示され、当時の感動を詳しく振り返れます。</p>
-                </section>
+        <section className="manual-section card">
+          <h2><Camera size={20} /> 思い出の記録（記憶）</h2>
+          <p>旅先で撮った写真は「記憶」タブへ。スマホのカメラでその場ですぐに保存できます。画像をクリックすると大きく表示され、当時の感動を詳しく振り返れます。</p>
+        </section>
 
-                <section className="manual-section card">
-                    <h2><Wallet size={20} /> 準備費用</h2>
-                    <p>「軍資金」タブの下部では、航空券や宿泊費など、旅行前にかかる費用を管理できます。すべての項目名と金額は自由に編集・追加可能です。</p>
-                </section>
-            </div>
+        <section className="manual-section card">
+          <h2><Wallet size={20} /> 準備費用</h2>
+          <p>「軍資金」タブの下部では、航空券や宿泊費など、旅行前にかかる費用を管理できます。すべての項目名と金額は自由に編集・追加可能です。</p>
+        </section>
+      </div>
 
-            <style>{`
+      <style>{`
         .manual-tab {
           display: flex;
           flex-direction: column;
@@ -53,6 +53,31 @@ const ManualTab: React.FC = () => {
           font-family: var(--font-serif);
           color: var(--antique-ink);
           margin-bottom: 0.5rem;
+        }
+        .manual-toc {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 0.8rem;
+          margin-top: 1.2rem;
+          padding-top: 1rem;
+          border-top: 1px dotted var(--parchment-dark);
+        }
+        .toc-link {
+          font-size: 0.85rem;
+          color: var(--antique-red);
+          text-decoration: none;
+          font-family: var(--font-serif);
+          background: rgba(142, 33, 33, 0.05);
+          padding: 0.3rem 0.6rem;
+          border-radius: 4px;
+          border: 1px solid transparent;
+          transition: all 0.2s;
+        }
+        .toc-link:hover {
+          background: var(--antique-red);
+          color: white;
+          border-color: var(--parchment);
         }
         .manual-grid {
           display: grid;
@@ -82,8 +107,8 @@ const ManualTab: React.FC = () => {
           color: var(--antique-ink);
         }
       `}</style>
-        </div>
-    );
+    </div>
+  );
 };
 
 export default ManualTab;

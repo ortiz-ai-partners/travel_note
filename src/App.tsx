@@ -423,7 +423,8 @@ const App: React.FC = () => {
             {activeTripId && (
               <>
                 <button onClick={handleDownloadPDF} className="action-btn" title="書を保存"><Download size={20} /></button>
-                <button onClick={() => setActiveTab('info')} className="action-btn" title="設定"><Settings size={20} /></button>
+                <button onClick={() => setActiveTab('manual')} className={`action-btn ${activeTab === 'manual' ? 'active-header-btn' : ''}`} title="使い方"><HelpCircle size={20} /></button>
+                <button onClick={() => setActiveTab('info')} className={`action-btn ${activeTab === 'info' ? 'active-header-btn' : ''}`} title="設定"><Settings size={20} /></button>
                 <button onClick={resetData} className="action-btn danger" title="書を破棄"><Trash2 size={20} /></button>
               </>
             )}
@@ -444,10 +445,6 @@ const App: React.FC = () => {
 
         {activeTripId && (
           <nav className="tab-nav">
-            <button className={`tab-btn ${activeTab === 'manual' ? 'active' : ''}`} onClick={() => setActiveTab('manual')}>
-              <HelpCircle size={20} />
-              <span>使い方</span>
-            </button>
             <button className={`tab-btn ${activeTab === 'schedule' ? 'active' : ''}`} onClick={() => setActiveTab('schedule')}>
               <Calendar size={20} />
               <span>旅程</span>
@@ -471,10 +468,6 @@ const App: React.FC = () => {
             <button className={`tab-btn ${activeTab === 'photos' ? 'active' : ''}`} onClick={() => setActiveTab('photos')}>
               <Camera size={20} />
               <span>記憶</span>
-            </button>
-            <button className={`tab-btn ${activeTab === 'info' ? 'active' : ''}`} onClick={() => setActiveTab('info')}>
-              <Shield size={20} />
-              <span>設定</span>
             </button>
           </nav>
         )}
@@ -800,6 +793,10 @@ const App: React.FC = () => {
           background: var(--antique-gold) !important;
           color: white !important;
           border-color: var(--antique-gold) !important;
+        }
+        .active-header-btn {
+          background: var(--antique-gold) !important;
+          color: white !important;
         }
         .info-section {
           background: var(--parchment);
