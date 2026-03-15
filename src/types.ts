@@ -17,7 +17,7 @@ export interface TripItem {
     mapLink?: string;
     bookingLink?: string;
     completed: boolean;
-    transport?: 'plane' | 'train' | 'bus' | 'car' | 'walk';
+    transport?: 'plane' | 'train' | 'bus' | 'car' | 'walk' | 'bike' | 'ship' | 'robot' | 'tram';
 }
 
 export interface DaySchedule {

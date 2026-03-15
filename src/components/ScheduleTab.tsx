@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { AppData, TripItem } from '../types';
-import { MapPin, Notebook, Plus, CheckCircle2, Circle, Trash2, Plane, Train, Bus, Car, Footprints, ExternalLink, Link, Lock, Unlock } from 'lucide-react';
+import { MapPin, Notebook, Plus, CheckCircle2, Circle, Trash2, Plane, Train, Bus, Car, Footprints, ExternalLink, Link, Lock, Unlock, Bike, Ship, Bot, TramFront } from 'lucide-react';
 
 interface Props {
   data: AppData;
@@ -165,8 +165,19 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
       case 'bus': return <Bus size={14} />;
       case 'car': return <Car size={14} />;
       case 'walk': return <Footprints size={14} />;
+      case 'bike': return <Bike size={14} />;
+      case 'ship': return <Ship size={14} />;
+      case 'robot': return <Bot size={14} />;
+      case 'tram': return <TramFront size={14} />;
       default: return null;
     }
+  };
+
+  const cycleTransport = (dayIdx: number, itemId: string, current?: string) => {
+    const types: (string | undefined)[] = [undefined, 'plane', 'train', 'bus', 'car', 'walk', 'bike', 'ship', 'robot', 'tram'];
+    const currentIndex = types.indexOf(current);
+    const nextIndex = (currentIndex + 1) % types.length;
+    updateItem(dayIdx, itemId, 'transport', types[nextIndex]);
   };
 
   const totalItems = data.schedule.reduce((acc, day) => acc + day.items.length, 0);
@@ -267,7 +278,13 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
                           value={item.name}
                           onChange={(e) => updateItem(selectedDayIdx, item.id, 'name', e.target.value)}
                         />
-                        {getTransportIcon(item.transport)}
+                        <button
+                          className="transport-toggle-btn"
+                          onClick={() => cycleTransport(selectedDayIdx, item.id, item.transport)}
+                          title="移動手段を切り替え"
+                        >
+                          {getTransportIcon(item.transport) || <Circle size={14} className="transport-empty" />}
+                        </button>
                       </div>
                       <div className="item-location">
                         <MapPin size={12} />
@@ -843,6 +860,33 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
           text-decoration: line-through;
           color: var(--text-muted);
           opacity: 0.6;
+        }
+        .item-name-row {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .transport-toggle-btn {
+          background: var(--parchment-dark);
+          border: 1px solid rgba(0,0,0,0.1);
+          border-radius: 50%;
+          width: 24px;
+          height: 24px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          color: var(--antique-ink);
+          transition: all 0.2s;
+          flex-shrink: 0;
+        }
+        .transport-toggle-btn:hover {
+          background: var(--antique-gold);
+          color: white;
+          border-color: var(--antique-gold);
+        }
+        .transport-empty {
+          opacity: 0.3;
         }
         .add-item-btn {
           display: flex;

@@ -7,30 +7,38 @@ const ManualTab: React.FC = () => {
       <div className="manual-header card">
         <h1><HelpCircle size={28} style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} /> 冒険の進め方</h1>
         <p>この「冒険の書」を使いこなし、最高の旅を記録するためのガイドです。</p>
+
+        <nav className="manual-toc">
+          <a href="#section-dashboard" className="toc-link">ダッシュボード</a>
+          <a href="#section-schedule" className="toc-link">旅程・軍資金</a>
+          <a href="#section-packing" className="toc-link">持ち物</a>
+          <a href="#section-memories" className="toc-link">思い出</a>
+          <a href="#section-prep" className="toc-link">準備費用</a>
+        </nav>
       </div>
 
       <div className="manual-grid">
-        <section className="manual-section card">
+        <section id="section-dashboard" className="manual-section card">
           <h2><BookOpen size={20} /> 冒険の管理（ダッシュボード）</h2>
           <p>最初の画面では、複数の旅（冒険の書）を作成・管理できます。タイトルの鉛筆マークをタップして、好きな名前を付けましょう。</p>
         </section>
 
-        <section className="manual-section card">
+        <section id="section-schedule" className="manual-section card">
           <h2><Map size={20} /> 旅程と予算（軍資金）</h2>
           <p>「旅程」で日ごとのスケジュールを入力すると、そこで設定した「予定額」が「軍資金」タブに自動反映されます。実績を入力して、予算オーバーに気をつけましょう！</p>
         </section>
 
-        <section className="manual-section card">
+        <section id="section-packing" className="manual-section card">
           <h2><Luggage size={20} /> 装備の準備（持ち物）</h2>
           <p>「荷物」タブでは、便利なテンプレートが使えます。タップしてプレビューし、一括で追加できます。自分だけのカスタムテンプレートを保存することも可能です（プレミアム機能）。</p>
         </section>
 
-        <section className="manual-section card">
+        <section id="section-memories" className="manual-section card">
           <h2><Camera size={20} /> 思い出の記録（記憶）</h2>
-          <p>旅先で撮った写真は「記憶」タブへ。スマホのカメラでその場ですぐに保存できます。画像をクリックすると大きく表示され、当時の感動を詳しく振り返れます。</p>
+          <p>旅先で撮った写真は「記憶」タブへ。スマホのカメラ store その場ですぐに保存できます。画像をクリックすると大きく表示され、当時の感動を詳しく振り返れます。</p>
         </section>
 
-        <section className="manual-section card">
+        <section id="section-prep" className="manual-section card">
           <h2><Wallet size={20} /> 準備費用</h2>
           <p>「軍資金」タブの下部では、航空券や宿泊費など、旅行前にかかる費用を管理できます。すべての項目名と金額は自由に編集・追加可能です。</p>
         </section>
