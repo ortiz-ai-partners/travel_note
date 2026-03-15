@@ -25,7 +25,7 @@ const ManualTab: React.FC = () => {
 
         <section id="section-schedule" className="manual-section card">
           <h2><Map size={20} /> 旅程と予算（軍資金）</h2>
-          <p>「旅程」で日ごとのスケジュールを入力できます。予定名の横にある**アイコンをタップしてプルダウンから選択**すると、飛行機、電車、自転車、ロボットなどの移動手段を自由に設定できます！設定した「予定額」は「軍資金」に反映されます。</p>
+          <p>「旅程」で日ごとのスケジュールを入力できます。予定名の横にあるアイコンから移動手段を選べます。また、左端の**三本線（ハンドル）をドラッグ**することで、予定の順番を自由に入れ替えることができます！</p>
         </section>
 
         <section id="section-packing" className="manual-section card">

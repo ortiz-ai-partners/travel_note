@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import type { AppData, TripItem } from '../types';
-import { MapPin, Notebook, Plus, CheckCircle2, Circle, Trash2, Plane, Train, Bus, Car, Footprints, ExternalLink, Link, Lock, Unlock, Bike, Ship, Bot, TramFront } from 'lucide-react';
+import { MapPin, Notebook, Plus, CheckCircle2, Circle, Trash2, Plane, Train, Bus, Car, Footprints, ExternalLink, Link, Lock, Unlock, Bike, Ship, Bot, TramFront, GripVertical } from 'lucide-react';
 
 interface Props {
   data: AppData;
@@ -244,13 +244,48 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
               <div
                 key={item.id}
                 className={`timeline-item ${item.completed ? 'completed' : ''}`}
-                draggable={true}
-                onDragStart={(e) => handleDragStart(e, selectedDayIdx, itemIdx)}
                 onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, selectedDayIdx, itemIdx)}
-                onDragEnd={(e) => e.currentTarget.classList.remove('dragging')}
+                onDragEnd={() => {
+                  const items = document.querySelectorAll('.timeline-item');
+                  items.forEach(el => el.classList.remove('dragging'));
+                }}
               >
                 <div className="timeline-left">
+                  <div
+                    className="drag-handle"
+                    draggable={true}
+                    onDragStart={(e) => {
+                      handleDragStart(e, selectedDayIdx, itemIdx);
+                      e.currentTarget.parentElement?.parentElement?.classList.add('dragging');
+                    }}
+                  >
+                    <GripVertical size={16} />
+                  </div>
+
+                  <div className="transport-select-wrapper">
+                    <div className="transport-current-icon">
+                      {getTransportIcon(item.transport) || <Circle size={14} className="transport-empty" />}
+                    </div>
+                    <select
+                      className="transport-select"
+                      value={item.transport || ''}
+                      onChange={(e) => updateItem(selectedDayIdx, item.id, 'transport', e.target.value || undefined)}
+                      title="移動手段を選択"
+                    >
+                      <option value="">なし</option>
+                      <option value="plane">飛行機</option>
+                      <option value="train">電車</option>
+                      <option value="bus">バス</option>
+                      <option value="car">車</option>
+                      <option value="walk">徒歩</option>
+                      <option value="bike">自転車</option>
+                      <option value="ship">船</option>
+                      <option value="robot">ロボット</option>
+                      <option value="tram">路面電車</option>
+                    </select>
+                  </div>
+
                   <input
                     type="text"
                     className="time-input"
@@ -267,34 +302,18 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
                     </button>
                     <div className="item-body">
                       <div className="item-name-row">
-                        <input
-                          type="text"
-                          className="item-name-input"
+                        <textarea
+                          className="item-name-textarea"
+                          rows={1}
                           value={item.name}
                           onChange={(e) => updateItem(selectedDayIdx, item.id, 'name', e.target.value)}
+                          onInput={(e) => {
+                            const target = e.target as HTMLTextAreaElement;
+                            target.style.height = 'auto';
+                            target.style.height = target.scrollHeight + 'px';
+                          }}
+                          placeholder="新しい予定"
                         />
-                        <div className="transport-select-wrapper">
-                          <div className="transport-current-icon">
-                            {getTransportIcon(item.transport) || <Circle size={14} className="transport-empty" />}
-                          </div>
-                          <select
-                            className="transport-select"
-                            value={item.transport || ''}
-                            onChange={(e) => updateItem(selectedDayIdx, item.id, 'transport', e.target.value || undefined)}
-                            title="移動手段を選択"
-                          >
-                            <option value="">なし</option>
-                            <option value="plane">飛行機</option>
-                            <option value="train">電車</option>
-                            <option value="bus">バス</option>
-                            <option value="car">車</option>
-                            <option value="walk">徒歩</option>
-                            <option value="bike">自転車</option>
-                            <option value="ship">船</option>
-                            <option value="robot">ロボット</option>
-                            <option value="tram">路面電車</option>
-                          </select>
-                        </div>
                       </div>
                       <div className="item-location">
                         <MapPin size={12} />
@@ -600,14 +619,14 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
           flex-shrink: 0;
         }
         .time-input {
-          font-size: 0.85rem;
+          font-size: 0.75rem;
           font-weight: 700;
           color: var(--antique-ink);
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.3rem;
           font-family: var(--font-sans);
           border: none;
           background: transparent;
-          width: 100%;
+          width: 50px;
           text-align: center;
         }
         .time-input:focus {
@@ -640,8 +659,8 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
         .item-body {
           flex: 1;
         }
-        .item-name-input {
-          font-size: 1.05rem;
+        .item-name-textarea {
+          font-size: 1rem;
           font-weight: 700;
           color: var(--antique-ink);
           flex: 1;
@@ -650,8 +669,13 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
           border: none;
           padding: 2px 0;
           font-family: var(--font-serif);
+          word-break: break-all;
+          white-space: pre-wrap;
+          overflow: hidden;
+          resize: none;
+          line-height: 1.4;
         }
-        .item-name-input:focus {
+        .item-name-textarea:focus {
           outline: none;
           background: rgba(197, 160, 89, 0.1);
         }
@@ -675,12 +699,12 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
         .item-details {
           background: rgba(0,0,0,0.03);
           border-left: 2px solid var(--antique-gold);
-          padding: 1rem;
+          padding: 0.8rem;
           border-radius: 4px;
-          margin-left: 1rem;
+          margin-left: 0.5rem;
           display: flex;
           flex-direction: column;
-          gap: 0.8rem;
+          gap: 0.6rem;
           overflow: hidden;
         }
         .detail-row {
@@ -886,9 +910,12 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
           background: var(--parchment-dark);
           border: 1px solid rgba(0,0,0,0.1);
           border-radius: 4px;
-          padding: 0 0.5rem;
-          height: 28px;
+          padding: 0 0.3rem;
+          height: 24px;
+          margin-bottom: 0.3rem;
           transition: all 0.2s;
+          width: 32px;
+          justify-content: center;
         }
         .transport-select-wrapper:hover {
           border-color: var(--antique-gold);
@@ -899,7 +926,6 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
           align-items: center;
           justify-content: center;
           color: var(--antique-ink);
-          margin-right: 0.3rem;
           pointer-events: none;
         }
         .transport-select {
@@ -914,6 +940,21 @@ const ScheduleTab: React.FC<Props> = ({ data, setData, addDay, removeDay }) => {
         }
         .transport-empty {
           opacity: 0.3;
+        }
+        .drag-handle {
+          cursor: grab;
+          color: var(--parchment-dark);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 4px 0;
+          transition: color 0.2s;
+        }
+        .drag-handle:active {
+          cursor: grabbing;
+        }
+        .drag-handle:hover {
+          color: var(--antique-gold);
         }
         .add-item-btn {
           display: flex;
